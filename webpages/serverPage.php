@@ -29,9 +29,13 @@
 	// set the position in the currentState db
 	// display the choises available at the place in .html
 ?> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="styles.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 	<script src="scripts.js" type="text/Javascript"></script> 
 </head>
 <body onload="init()">
