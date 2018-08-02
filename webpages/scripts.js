@@ -16,6 +16,7 @@ function init() {
 }
 
 function gotoThisChoice(_num) {
+	console.log("go to " + _num);
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		// {"choice1":"Goto Choice 1","choice2":"Goto Choice 2","choice1Num":"1","choice2Num":"2"}

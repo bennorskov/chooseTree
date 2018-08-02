@@ -5,14 +5,15 @@ using UnityEngine;
 public class positionScript : MonoBehaviour {
 
     public int id = 0;
+    private TextMesh displayContainer;
+    private void Start() {
+        displayContainer = GetComponentInChildren<TextMesh>(true);
+    }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void changeDisplayText(string _displayText) {
+        displayContainer.text = _displayText;
+    }
+    public void hideDisplayText() {
+        displayContainer.text = "";
+    }
 }
