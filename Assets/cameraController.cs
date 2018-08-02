@@ -25,6 +25,7 @@ public class cameraController : MonoBehaviour {
 
     // Where are we going?
     private Vector3 whereToMoveTo = Vector3.zero;
+    private positionScript scriptOfTarget;
     private List<positionScript> positions = new List<positionScript>();
 
     // How do we get there?
@@ -89,6 +90,7 @@ public class cameraController : MonoBehaviour {
         if (Vector3.Distance(transform.position, whereToMoveTo) < minimumDistance) {
             movementState = moveHolder.ARRIVED;
             whereToMoveTo = Vector3.zero;
+            scriptOfTarget.startTextFadeIn();
             // print("arrived!");
         }
     }
@@ -108,7 +110,8 @@ public class cameraController : MonoBehaviour {
             foreach (positionScript ps in positions) {
                 if (_goWhere == ps.id) {
                     whereToMoveTo = ps.transform.position;
-                    ps.changeDisplayText(_displayText);
+                    scriptOfTarget = ps;
+                    scriptOfTarget.changeDisplayText(_displayText);
                     break;
                 }
             }
