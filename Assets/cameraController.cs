@@ -35,7 +35,12 @@ public class cameraController : MonoBehaviour {
     // turns out transforms are pass by reference
     // AND they're protected, so you can't dynamically create one
     // Thanks, Unity
-    public Transform getNextRotationHolder; 
+    public Transform getNextRotationHolder;
+
+    // When do we ask the server for new info?
+    private float askTimer = 1.0f;
+    private float lastTime = 0f;
+    private bool coRoutineRunning = false;
 
     // ————— ————— ————— ————— 
 
@@ -49,6 +54,10 @@ public class cameraController : MonoBehaviour {
             // print( positions );
             positions.Add( go.GetComponent<positionScript>() );
         }
+
+        // Initial Server Request
+        lastTime = Time.time;
+        StartCoroutine(getPositionFromServer());
 	}
 	
     // ————— ————— ————— ————— 
@@ -99,12 +108,13 @@ public class cameraController : MonoBehaviour {
             foreach (positionScript ps in positions) {
                 if (_goWhere == ps.id) {
                     whereToMoveTo = ps.transform.position;
+                    ps.changeDisplayText(_displayText);
                     break;
                 }
             }
             if (whereToMoveTo == Vector3.zero) { // catch error where the id is out of range
                 print("Error found!");
-                whereToMoveTo = positions[0].transform.position; // go to first position as soft break
+                whereToMoveTo = positions[0].transform.position; // go to first position as fallback
             }
         }
         // ————— set next look rotation
@@ -128,7 +138,11 @@ public class cameraController : MonoBehaviour {
         }
         */
 
-        if (Input.GetKey(KeyCode.A)) {
+        // if we don't have an open request (coRoutineRunning) 
+        // && it's been askTimer amount of time since last request, make a request
+        if (!coRoutineRunning && Time.time > lastTime + askTimer) {
+            print("get new positions");
+            lastTime = Time.time;
             StartCoroutine(getPositionFromServer());
         }
     }
@@ -136,6 +150,7 @@ public class cameraController : MonoBehaviour {
     // ————— Send web request to get json of active object
     // —————
     IEnumerator getPositionFromServer() {
+        coRoutineRunning = true;
         // php page that spits out a json object
         WWW positionRequest = new WWW("http://bennorskov.com/experiments/currentState.php");
         yield return positionRequest;
@@ -144,12 +159,20 @@ public class cameraController : MonoBehaviour {
             print("server request error " + positionRequest.error);
         } else {
 
-            // print(positionRequest.text);
+            print(positionRequest.text);
             PositionData positionData = JsonUtility.FromJson<PositionData>(positionRequest.text);
 
             if (currentPosition != positionData.id) {
+                turnOffTextDisplays();
                 getNextPosition(positionData.id, positionData.displayText);
             }
+        }
+        coRoutineRunning = false;
+    }
+
+    void turnOffTextDisplays() {
+        foreach (positionScript ps in positions) {
+            ps.hideDisplayText();
         }
     }
 

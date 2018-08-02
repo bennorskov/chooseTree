@@ -7,6 +7,10 @@
 	$choice2Num = -1;
 
 	$currentPositionId = 1;
+
+	// fetch the current node based on the $_GET from the website
+	// set the position in the currentState db
+	// display the choises available at the place in .html
 	if ($result = $mysqli->query("SELECT * FROM choiceStruct WHERE id = '$currentPositionId'")) {
 	 	while ($row = $result->fetch_assoc()) {
 	        $choice1Text = ($row["choice1"]);
@@ -25,9 +29,6 @@
 	 /* close connection */
 	$mysqli->close();
 
-	// fetch the current node based on the $_GET from the website
-	// set the position in the currentState db
-	// display the choises available at the place in .html
 ?> 
 <!DOCTYPE html>
 <html lang="en">
