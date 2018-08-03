@@ -16,4 +16,8 @@ body {
     line-height: 48vh;
     font-size: 4em;
     letter-spacing: .05em;
+    cursor: pointer;
+}
+#choiceHolder h1#choice1 {
+    border-bottom: 2px solid white;
 }
